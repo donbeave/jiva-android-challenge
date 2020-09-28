@@ -6,7 +6,7 @@ object Versions {
 
     // Gradle plugins
 
-    const val gradleAndroidPlugin = "4.1.0-rc03"
+    const val gradleAndroidPlugin = "4.0.1"
 
     // https://plugins.gradle.org/plugin/com.adarshr.test-logger
     const val gradleTestLoggerPlugin = "2.1.0"
