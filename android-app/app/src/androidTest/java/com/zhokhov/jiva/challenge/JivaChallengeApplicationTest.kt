@@ -18,7 +18,6 @@ import dagger.hilt.android.testing.UninstallModules
 import org.junit.Rule
 import org.junit.Test
 
-
 @HiltAndroidTest
 @UninstallModules(StorageModule::class, NetworkModule::class)
 class JivaChallengeApplicationTest {
