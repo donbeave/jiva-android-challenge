@@ -1,25 +1,25 @@
 package com.zhokhov.jiva.challenge
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.*
-import com.zhokhov.jiva.challenge.R.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.google.common.truth.Truth.assertThat
+import com.zhokhov.jiva.challenge.R.id
+import com.zhokhov.jiva.challenge.di.NetworkModule
 import com.zhokhov.jiva.challenge.di.StorageModule
 import com.zhokhov.jiva.challenge.ui.login.LoginActivity
+import com.zhokhov.jiva.challenge.ui.profile.ProfileActivity
+import com.zhokhov.jiva.challenge.utils.EspressoHelper.getCurrentActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import org.junit.Rule
 import org.junit.Test
 
-@UninstallModules(StorageModule::class)
+
 @HiltAndroidTest
+@UninstallModules(StorageModule::class, NetworkModule::class)
 class JivaChallengeApplicationTest {
 
     @get:Rule
@@ -27,14 +27,22 @@ class JivaChallengeApplicationTest {
 
     @Test
     fun runApp() {
+        // open the app (start from login activity)
         ActivityScenario.launch(LoginActivity::class.java)
 
-        // Start from Login View
-        Espresso.onView(withId(id.emailInputBox))
-            .perform(ViewActions.typeText("test@test.com"), ViewActions.closeSoftKeyboard())
-        Espresso.onView(withId(id.passwordInputBox))
-            .perform(ViewActions.typeText("test"), ViewActions.closeSoftKeyboard())
-        Espresso.onView(withId(id.loginButton)).perform(ViewActions.click())
+        // fill email and password and login
+        onView(withId(id.emailInputBox)).perform(
+            typeText("test@test.com"),
+            closeSoftKeyboard()
+        )
+        onView(withId(id.passwordInputBox)).perform(
+            typeText("test"),
+            closeSoftKeyboard()
+        )
+        onView(withId(id.loginButton)).perform(click())
+
+        // check profile view was opened
+        assertThat(getCurrentActivity()!!.javaClass).isEqualTo(ProfileActivity::class.java)
     }
 
 }

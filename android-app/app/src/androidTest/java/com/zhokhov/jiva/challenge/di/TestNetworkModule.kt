@@ -1,7 +1,7 @@
 package com.zhokhov.jiva.challenge.di
 
-import com.zhokhov.jiva.challenge.data.storage.FakeStorage
-import com.zhokhov.jiva.challenge.data.storage.Storage
+import com.zhokhov.jiva.challenge.data.http.ApiService
+import com.zhokhov.jiva.challenge.data.http.FakeApiService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -9,9 +9,9 @@ import dagger.hilt.android.components.ApplicationComponent
 
 @Module
 @InstallIn(ApplicationComponent::class)
-abstract class TestStorageModule {
+abstract class TestNetworkModule {
 
     @Binds
-    abstract fun provideStorage(storage: FakeStorage): Storage
+    abstract fun provideApiService(apiService: FakeApiService): ApiService
 
 }

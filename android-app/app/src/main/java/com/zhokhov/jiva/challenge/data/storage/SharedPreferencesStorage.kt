@@ -10,7 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class SharedPreferencesStorage @Inject constructor(@ApplicationContext private val appContext: Context) :
+class SharedPreferencesStorage @Inject constructor(@ApplicationContext appContext: Context) :
     Storage {
 
     private val emailKey = "ACCOUNT_EMAIL"

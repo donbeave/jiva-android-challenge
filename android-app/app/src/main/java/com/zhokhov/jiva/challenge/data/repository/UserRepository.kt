@@ -8,7 +8,7 @@ import com.zhokhov.jiva.challenge.data.http.AvatarRequest
 import com.zhokhov.jiva.challenge.data.http.NewSessionRequest
 import com.zhokhov.jiva.challenge.data.model.LoginCredentials
 import com.zhokhov.jiva.challenge.data.model.LoginSession
-import com.zhokhov.jiva.challenge.data.storage.SharedPreferencesStorage
+import com.zhokhov.jiva.challenge.data.storage.Storage
 import io.reactivex.rxjava3.core.Single
 import retrofit2.HttpException
 import timber.log.Timber
@@ -18,41 +18,42 @@ import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val sharedPreferencesStorage: SharedPreferencesStorage
+    private val storage: Storage
 ) {
 
     fun getCredentials(): LoginCredentials? {
-        return sharedPreferencesStorage.getCredentials()
+        return storage.getCredentials()
     }
 
     fun getSession(): LoginSession? {
-        return sharedPreferencesStorage.getSession()
+        return storage.getSession()
     }
 
     fun login(email: String, password: String): Single<LoginSession> {
         Timber.d("Attempt to sign in for email %s", email)
 
-        return apiService.initNewSession(NewSessionRequest(email, password))
+        return apiService
+            .initNewSession(NewSessionRequest(email, password))
             .map { session ->
-                sharedPreferencesStorage.saveEmailAndPassword(email, password)
+                storage.saveEmailAndPassword(email, password)
 
-                sharedPreferencesStorage.saveUserIdAndToken(session.userId, session.token)
+                storage.saveUserIdAndToken(session.userId, session.token)
             }
     }
 
     fun getAvatar(): Single<Bitmap> {
-        val session = sharedPreferencesStorage.getSession()!!
+        val session = storage.getSession()!!
 
-        return apiService.getUserProfile("Bearer ${session.token}", session.userId)
+        return apiService
+            .getUserProfile("Bearer ${session.token}", session.userId)
             .doOnError { e ->
                 // clear session if back-end was restarted and lost data
                 if (e is HttpException) {
                     if (e.code() == 401) {
-                        sharedPreferencesStorage.clearSession()
+                        storage.clearSession()
                     }
                 }
             }.map {
@@ -65,7 +66,7 @@ class UserRepository @Inject constructor(
 
         val byteCount = bitmap.allocationByteCount
 
-        val session = sharedPreferencesStorage.getSession()!!
+        val session = storage.getSession()!!
 
         val outputStream = ByteArrayOutputStream()
 
@@ -74,20 +75,23 @@ class UserRepository @Inject constructor(
 
             val base64 = Base64.encodeToString(it.toByteArray(), Base64.NO_WRAP)
 
-            apiService.uploadAvatar(
-                token = session.token,
-                userId = session.userId,
-                avatarRequest = AvatarRequest(base64)
-            ).doOnError { e ->
-                // clear session if back-end was restarted and lost data
-                if (e is HttpException) {
-                    if (e.code() == 401) {
-                        sharedPreferencesStorage.clearSession()
+            apiService
+                .uploadAvatar(
+                    token = session.token,
+                    userId = session.userId,
+                    avatarRequest = AvatarRequest(base64)
+                )
+                .doOnError { e ->
+                    // clear session if back-end was restarted and lost data
+                    if (e is HttpException) {
+                        if (e.code() == 401) {
+                            storage.clearSession()
+                        }
                     }
                 }
-            }.map { response ->
-                response.avatarUrl
-            }
+                .map { response ->
+                    response.avatarUrl
+                }
         }
     }
 

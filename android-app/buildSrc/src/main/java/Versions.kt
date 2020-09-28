@@ -19,5 +19,12 @@ object Versions {
     const val jackson = "2.11.2"
     const val rxAndroid = "3.0.0"
     const val rxJava = "3.0.6"
+    const val truth = "1.0.1"
+    const val junit = "4.13"
+    const val timber = "4.7.1"
+    const val leakcanary = "2.4"
+    const val mockito = "3.3.3"
+    const val material = "1.2.1"
+    const val androidXHilt = "1.0.0-alpha02"
 
 }
