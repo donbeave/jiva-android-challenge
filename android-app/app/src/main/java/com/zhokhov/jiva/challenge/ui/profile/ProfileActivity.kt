@@ -53,10 +53,10 @@ class ProfileActivity : AppCompatActivity() {
         profileViewModel.loginCredentials.observe(this, Observer {
             val loginCredentials = it ?: return@Observer
 
-            binding.emailBox.setText(
+            binding.profileEmailBox.setText(
                 loginCredentials.email, TextView.BufferType.NORMAL
             )
-            binding.passwordBox.setText(
+            binding.profilePasswordBox.setText(
                 loginCredentials.password, TextView.BufferType.NORMAL
             )
         })

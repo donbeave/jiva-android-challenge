@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.google.android.material.textfield.TextInputEditText
 import com.google.common.truth.Truth.assertThat
 import com.zhokhov.jiva.challenge.R.id
 import com.zhokhov.jiva.challenge.di.NetworkModule
@@ -42,7 +43,18 @@ class JivaChallengeApplicationTest {
         onView(withId(id.loginButton)).perform(click())
 
         // check profile view was opened
-        assertThat(getCurrentActivity()!!.javaClass).isEqualTo(ProfileActivity::class.java)
+        val activity = getCurrentActivity()!!
+
+        assertThat(activity.javaClass).isEqualTo(ProfileActivity::class.java)
+
+        // check email and password boxes
+        val profileEmailBox = activity.findViewById<TextInputEditText>(id.profileEmailBox)
+
+        assertThat(profileEmailBox.text.toString()).isEqualTo("test@test.com")
+
+        val profilePasswordBox = activity.findViewById<TextInputEditText>(id.profilePasswordBox)
+
+        assertThat(profilePasswordBox.text.toString()).isEqualTo("test")
     }
 
 }
