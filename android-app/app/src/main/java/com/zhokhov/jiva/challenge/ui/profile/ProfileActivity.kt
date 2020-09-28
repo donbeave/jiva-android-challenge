@@ -1,6 +1,5 @@
 package com.zhokhov.jiva.challenge.ui.profile
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -12,16 +11,18 @@ import android.provider.MediaStore
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.zhokhov.jiva.challenge.R
 import com.zhokhov.jiva.challenge.databinding.ActivityProfileBinding
+import com.zhokhov.jiva.challenge.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import com.zhokhov.jiva.challenge.R
-import com.zhokhov.jiva.challenge.ui.login.LoginActivity
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
@@ -83,17 +84,17 @@ class ProfileActivity : AppCompatActivity() {
         binding.avatar.setOnClickListener {
             Timber.d("Clicked profile photo")
 
-            selectImage(this)
+            showDialog()
         }
     }
 
-    private fun selectImage(context: Context) {
+    private fun showDialog() {
         val items = arrayOf(
             getString(R.string.take_photo),
             getString(R.string.choose_from_library)
         )
 
-        MaterialAlertDialogBuilder(context)
+        MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.change_profile_photo))
             .setItems(items) { _, which ->
                 Timber.d("Selected %s", which)
@@ -137,7 +138,8 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateAvatar(bitmap: Bitmap) {
+    @VisibleForTesting
+    fun updateAvatar(bitmap: Bitmap) {
         // Assure that the Image uploaded to the backend does not exceed 1 MB
         val thumbnail = ThumbnailUtils.extractThumbnail(
             bitmap, 300, 300,

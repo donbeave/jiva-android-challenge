@@ -103,6 +103,7 @@ dependencies {
 
     // JUnit
     testImplementation("junit:junit:${Versions.junit}")
+    androidTestImplementation("junit:junit:${Versions.junit}")
 
     // Truth
     testImplementation("com.google.truth:truth:${Versions.truth}")

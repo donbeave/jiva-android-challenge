@@ -26,5 +26,6 @@ object Versions {
     const val mockito = "3.3.3"
     const val material = "1.2.1"
     const val androidXHilt = "1.0.0-alpha02"
+    const val espresso = "3.3.0"
 
 }
