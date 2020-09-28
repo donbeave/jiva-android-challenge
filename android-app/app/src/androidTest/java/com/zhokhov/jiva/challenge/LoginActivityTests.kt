@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.textfield.TextInputEditText
 import com.google.common.truth.Truth.assertThat
 import com.zhokhov.jiva.challenge.R.id
@@ -20,13 +21,17 @@ import org.junit.Test
 
 @HiltAndroidTest
 @UninstallModules(StorageModule::class, NetworkModule::class)
-class JivaChallengeApplicationTest {
+class LoginActivityTests {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    @get:Rule
+    var mRuntimePermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     @Test
-    fun runApp() {
+    fun login() {
         // open the app (start from login activity)
         ActivityScenario.launch(LoginActivity::class.java)
 

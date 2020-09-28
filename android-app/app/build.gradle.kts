@@ -61,9 +61,10 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.2.5")
     implementation("androidx.security:security-crypto:1.1.0-alpha02")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     androidTestImplementation("androidx.test:runner:1.3.0")
     androidTestImplementation("androidx.test:core-ktx:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espresso}")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:${Versions.espresso}")
 
     // AndroidX Hilt
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:${Versions.androidXHilt}")
