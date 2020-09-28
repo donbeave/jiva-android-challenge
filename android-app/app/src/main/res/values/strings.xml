@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Jiva Android Challenge</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="action_login">Log In</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_email_format">Correct e-mail address format: example@mail.com</string>
+    <string name="invalid_password_format">Password must contain at least 4 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="avatar">Avatar</string>
+    <string name="loading">Loading</string>
+    <string name="user_not_found">User not found</string>
+    <string name="wrong_password">Password is not correct</string>
+    <string name="unexpected_error">An unexpected error has occurred</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_library">Choose From Library</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="insufficient_rights">Insufficient rights to perform the operation</string>
+</resources>

@@ -1,0 +1,14 @@
+micronaut:
+  application:
+    name: jiva-server
+  server:
+    port: 11001
+    max-request-size: 1MB
+endpoints:
+  info:
+    enabled: true
+    sensitive: false
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: anonymous
