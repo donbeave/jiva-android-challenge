@@ -2,13 +2,13 @@ package com.zhokhov.jiva.challenge.data.repository
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Base64
 import com.zhokhov.jiva.challenge.data.http.ApiService
 import com.zhokhov.jiva.challenge.data.http.AvatarRequest
 import com.zhokhov.jiva.challenge.data.http.NewSessionRequest
 import com.zhokhov.jiva.challenge.data.model.LoginCredentials
 import com.zhokhov.jiva.challenge.data.model.LoginSession
 import com.zhokhov.jiva.challenge.data.storage.Storage
+import com.zhokhov.jiva.challenge.utils.Base64
 import io.reactivex.rxjava3.core.Single
 import retrofit2.HttpException
 import timber.log.Timber
@@ -21,7 +21,8 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val storage: Storage
+    private val storage: Storage,
+    private val base64: Base64
 ) {
 
     fun getCredentials(): LoginCredentials? {
@@ -64,8 +65,6 @@ class UserRepository @Inject constructor(
     fun updateAvatar(bitmap: Bitmap): Single<String> {
         Timber.d("Uploading avatar")
 
-        val byteCount = bitmap.allocationByteCount
-
         val session = storage.getSession()!!
 
         val outputStream = ByteArrayOutputStream()
@@ -73,7 +72,7 @@ class UserRepository @Inject constructor(
         return outputStream.use {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 85, it)
 
-            val base64 = Base64.encodeToString(it.toByteArray(), Base64.NO_WRAP)
+            val base64 = base64.encodeToString(it.toByteArray())
 
             apiService
                 .uploadAvatar(

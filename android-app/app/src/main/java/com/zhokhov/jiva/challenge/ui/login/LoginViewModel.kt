@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhokhov.jiva.challenge.R
+import com.zhokhov.jiva.challenge.data.SchedulerProvider
 import com.zhokhov.jiva.challenge.data.model.LoginCredentials
 import com.zhokhov.jiva.challenge.data.model.LoginSession
 import com.zhokhov.jiva.challenge.data.repository.UserRepository
@@ -17,7 +18,8 @@ import retrofit2.HttpException
 import timber.log.Timber
 
 class LoginViewModel @ViewModelInject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val schedulerProvider: SchedulerProvider
 ) : ViewModel() {
 
     companion object {
@@ -54,8 +56,8 @@ class LoginViewModel @ViewModelInject constructor(
         disposables.add(
             userRepository
                 .login(email, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
                 .subscribeWith(object : DisposableSingleObserver<LoginSession>() {
                     override fun onError(e: Throwable) {
                         Timber.e(e, "Error during login")

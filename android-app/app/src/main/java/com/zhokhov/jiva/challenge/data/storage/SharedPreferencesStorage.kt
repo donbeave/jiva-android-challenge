@@ -84,4 +84,11 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext appContex
         }
     }
 
+    override fun clearAll() {
+        with(sharedPreferences.edit()) {
+            clear()
+            commit()
+        }
+    }
+
 }

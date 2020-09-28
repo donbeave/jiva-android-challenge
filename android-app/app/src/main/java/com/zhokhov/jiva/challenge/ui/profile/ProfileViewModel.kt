@@ -5,6 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhokhov.jiva.challenge.data.SchedulerProvider
 import com.zhokhov.jiva.challenge.data.model.LoginCredentials
 import com.zhokhov.jiva.challenge.data.repository.UserRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -15,7 +16,8 @@ import retrofit2.HttpException
 import timber.log.Timber
 
 class ProfileViewModel @ViewModelInject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val schedulerProvider: SchedulerProvider
 ) : ViewModel() {
 
     private val _loginCredentials = MutableLiveData<LoginCredentials>().also { thisLiveData ->
@@ -39,8 +41,8 @@ class ProfileViewModel @ViewModelInject constructor(
         disposables.add(
             userRepository
                 .getAvatar()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
                 .subscribeWith(object : DisposableSingleObserver<Bitmap>() {
                     override fun onError(e: Throwable) {
                         if (e is HttpException) {
@@ -63,8 +65,8 @@ class ProfileViewModel @ViewModelInject constructor(
         disposables.add(
             userRepository
                 .updateAvatar(bitmap)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
                 .subscribeWith(object : DisposableSingleObserver<String>() {
                     override fun onError(e: Throwable) {
                         if (e is HttpException) {

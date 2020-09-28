@@ -15,4 +15,6 @@ interface Storage {
 
     fun clearSession()
 
+    fun clearAll()
+
 }

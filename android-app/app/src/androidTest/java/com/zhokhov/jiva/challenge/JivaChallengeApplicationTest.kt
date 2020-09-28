@@ -1,11 +1,11 @@
 package com.zhokhov.jiva.challenge
 
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import com.google.android.material.textfield.TextInputEditText
 import com.google.common.truth.Truth.assertThat
 import com.zhokhov.jiva.challenge.R.id
@@ -22,7 +22,7 @@ import org.junit.Test
 
 @HiltAndroidTest
 @UninstallModules(StorageModule::class, NetworkModule::class)
-class JivaChallengeApplicationTests {
+class JivaChallengeApplicationTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -56,6 +56,21 @@ class JivaChallengeApplicationTests {
         val profilePasswordBox = activity.findViewById<TextInputEditText>(id.profilePasswordBox)
 
         assertThat(profilePasswordBox.text.toString()).isEqualTo("test")
+
+        // upload avatar
+        runOnUiThread({
+            val bitmap = Bitmap.createBitmap(createColors(100), 10, 10, Bitmap.Config.RGB_565)
+
+            (activity as ProfileActivity).updateAvatar(bitmap)
+        })
+    }
+
+    private fun createColors(size: Int): IntArray {
+        val colors = IntArray(size)
+        for (i in 0 until size) {
+            colors[i] = 0xFF shl 24 or (i shl 16) or (i shl 8) or i
+        }
+        return colors
     }
 
 }

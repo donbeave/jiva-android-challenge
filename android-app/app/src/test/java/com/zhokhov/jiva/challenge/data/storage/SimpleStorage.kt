@@ -3,10 +3,8 @@ package com.zhokhov.jiva.challenge.data.storage
 import com.zhokhov.jiva.challenge.data.model.LoginCredentials
 import com.zhokhov.jiva.challenge.data.model.LoginSession
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.math.log
 
-class FakeStorage @Inject constructor() : Storage {
+class SimpleStorage : Storage {
 
     private var loginCredentials: LoginCredentials? = null
     private var loginSession: LoginSession? = null
